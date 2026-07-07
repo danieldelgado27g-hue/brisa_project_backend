@@ -1,0 +1,15 @@
+{
+  "name": "brisa_project_backend",
+  "version": "1.0.0",
+  "description": "Netlify Functions backend for DermaMatch",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "netlify build"
+  },
+  "dependencies": {
+    "@netlify/functions": "^2.0.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  }
+}
