@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm test:*)",
+      "Bash(node:*)",
+      "Bash(PGPASSWORD=brisa123 psql -h localhost -p 5433 -U brisa -d brisa_db -f db/migrations/001_add_roles.sql 2>&1)",
+      "Bash(docker cp:*)",
+      "Bash(docker exec:*)"
+    ]
+  }
+}

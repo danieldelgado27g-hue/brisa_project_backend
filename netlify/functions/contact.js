@@ -1,3 +1,5 @@
+const db = require("../../db");
+
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
@@ -10,22 +12,29 @@ exports.handler = async (event) => {
       return {
         statusCode: 400,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ error: "Todos los campos son requeridos" })
+        body: JSON.stringify({ error: "Todos los campos son requeridos" }),
       };
     }
 
-    // Aquí iría la lógica para enviar email o guardar en DB
-    console.log("Contacto recibido:", { name, email, message });
+    await db.query(
+      "INSERT INTO contacts (name, email, message) VALUES ($1, $2, $3)",
+      [name, email, message]
+    );
 
     return {
       statusCode: 200,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ success: true, message: `Gracias ${name}, te responderemos pronto.` })
+      body: JSON.stringify({
+        success: true,
+        message: `Gracias ${name}, te responderemos pronto.`,
+      }),
     };
   } catch (err) {
+    console.error("Contact error:", err);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Error interno del servidor" })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ error: "Error interno del servidor" }),
     };
   }
 };

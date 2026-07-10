@@ -1,15 +1,28 @@
 {
   "name": "brisa_project_backend",
   "version": "1.0.0",
-  "description": "Netlify Functions backend for DermaMatch",
+  "description": "Backend for DermaMatch — Netlify Functions + Docker + PostgreSQL",
   "scripts": {
+    "start": "node server.js",
     "dev": "netlify dev",
+    "docker:dev": "docker compose up --build",
+    "docker:prod": "NODE_ENV=production docker compose up --build",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "build": "netlify build"
   },
   "dependencies": {
-    "@netlify/functions": "^2.0.0"
+    "@netlify/functions": "^2.0.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.13.0"
   },
   "devDependencies": {
-    "netlify-cli": "^17.0.0"
+    "jest": "^30.4.2",
+    "netlify-cli": "^17.0.0",
+    "supertest": "^7.2.2"
   }
 }

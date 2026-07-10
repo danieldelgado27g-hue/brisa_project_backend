@@ -1,0 +1,43 @@
+services:
+  app:
+    build:
+      context: .
+      target: ${NODE_ENV:-development}
+    container_name: brisa_backend
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - PORT=3000
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-brisa}:${POSTGRES_PASSWORD:-brisa123}@db:5432/${POSTGRES_DB:-brisa_db}
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    container_name: brisa_postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-brisa}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-brisa123}
+      POSTGRES_DB: ${POSTGRES_DB:-brisa_db}
+    ports:
+      - "${POSTGRES_HOST_PORT:-5433}:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-brisa} -d ${POSTGRES_DB:-brisa_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  pg_data:
